@@ -48,7 +48,6 @@ Public Class RightClickTaskbar
 
     Private Sub backUpWorker_DoWork(sender As Object, e As DoWorkEventArgs) Handles backUpWorker.DoWork
         'get all the files from the backup folders
-        'Dim backupCopy As List(Of String) = RefreshBackup.testing(Watcher.FinalDestinationFolder)
         Dim localCopy As New List(Of String)
         'Get all the files from the local folders
         For Each c In My.Settings.WatchPaths
@@ -57,25 +56,21 @@ Public Class RightClickTaskbar
         Next
         'For each local file
         For Each c In localCopy
-            'If My.Computer.FileSystem.GetFileInfo(c).Directory.LastWriteTime Then
-
-            'End If
-            backUpWorker.ReportProgress((localCopy.IndexOf(c) / localCopy.Count) * 100, c)
             'Get the matching name of the backup file
             Dim backupFile As String = My.Settings.FinalDestination & Watcher.RemoveWatchPath(c)
-            My.Computer.FileSystem.GetFileInfo(c).Refresh()
-            My.Computer.FileSystem.GetFileInfo(backupFile).Refresh()
-            'If the backup copy contains the local copy & the last write times match
-            If My.Computer.FileSystem.FileExists(backupFile) Then 'And My.Computer.FileSystem.GetFileInfo(c).LastWriteTime <= My.Computer.FileSystem.GetFileInfo(backupFile).LastWriteTime Then
+            Dim lastEditDate As Date = My.Computer.FileSystem.GetFileInfo(c).LastWriteTime
+            Dim backupDate As Date = My.Computer.FileSystem.GetFileInfo(backupFile).LastWriteTime
+
+            'If the backup copy contains the local copy & the last write times are within 10 seconds
+            If My.Computer.FileSystem.FileExists(backupFile) And (lastEditDate - backupDate).Duration < New TimeSpan(0, 0, 10) Then
                 'This file is good (they both were last edited at the same time)
-                My.Computer.FileSystem.GetFileInfo(backupFile).LastWriteTime = My.Computer.FileSystem.GetFileInfo(c).LastWriteTime
+                Debug.Print("File times within 10 seconds!")
             Else
                 'Copy to new location
-                Debug.Print(My.Computer.FileSystem.GetFileInfo(c).LastWriteTime & " and " & My.Computer.FileSystem.GetFileInfo(backupFile).LastWriteTime)
                 Watcher.CopyFileToNetwork(c, backupFile)
-                'Update last write time (Last Access Time doesn't work)
-                If My.Computer.FileSystem.FileExists(backupFile) Then My.Computer.FileSystem.GetFileInfo(backupFile).LastWriteTime = My.Computer.FileSystem.GetFileInfo(c).LastWriteTime
             End If
+            ' Update the form's progress bar
+            backUpWorker.ReportProgress((localCopy.IndexOf(c) / localCopy.Count) * 100, c)
         Next
     End Sub
 
