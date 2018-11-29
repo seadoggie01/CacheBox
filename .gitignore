@@ -339,8 +339,4 @@ ASALocalRun/
 ###################################################
 
 # Click-Once directory (to publish to GitHub)
-!publish/
-
-# Ignore the bin directory
-bin/Debug/
-obj/Debug/
+!/publish/

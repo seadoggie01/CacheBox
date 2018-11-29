@@ -1,2 +1,8 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# As per https://refactorsaurusrex.com/post/2015/how-to-host-a-clickonce-installer-on-github/
+# For use in using ClickOnce over GitHub
+*.manifest binary
+*.application binary
+*.deploy binary
