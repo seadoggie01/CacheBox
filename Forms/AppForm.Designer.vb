@@ -22,6 +22,7 @@ Partial Class AppForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.ListBox1 = New System.Windows.Forms.ListBox()
         Me.deletePathBttn = New System.Windows.Forms.Button()
         Me.addPathBttn = New System.Windows.Forms.Button()
@@ -33,6 +34,7 @@ Partial Class AppForm
         Me.saveBttn = New System.Windows.Forms.Button()
         Me.colorSchemeLabel = New System.Windows.Forms.Label()
         Me.colorComboBox = New System.Windows.Forms.ComboBox()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.SuspendLayout()
         '
         'ListBox1
@@ -88,6 +90,7 @@ Partial Class AppForm
         Me.backupTextBox.Name = "backupTextBox"
         Me.backupTextBox.Size = New System.Drawing.Size(646, 22)
         Me.backupTextBox.TabIndex = 5
+        Me.ToolTip1.SetToolTip(Me.backupTextBox, "Double click to browse")
         '
         'backupLocationLabel
         '
@@ -193,4 +196,5 @@ Partial Class AppForm
     Friend WithEvents saveBttn As Button
     Friend WithEvents colorSchemeLabel As Label
     Friend WithEvents colorComboBox As ComboBox
+    Friend WithEvents ToolTip1 As ToolTip
 End Class

@@ -155,49 +155,82 @@ Public Class AppForm
     End Sub
 
     Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles CheckBox1.CheckedChanged
-        If CheckBox1.Checked Then
-            If My.Computer.FileSystem.FileExists(Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.exe") Then
-                My.Computer.FileSystem.DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.exe")
-            End If
-            My.Computer.FileSystem.CopyFile("CacheBox.exe", Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.exe")
+        'If the shortcut is exists
+        If My.Computer.FileSystem.FileExists(Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.lnk") Then
+            'Delete it
+            My.Computer.FileSystem.DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.lnk")
+        End If
 
-        Else
-            If My.Computer.FileSystem.FileExists(Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.exe") Then
-                My.Computer.FileSystem.DeleteFile(Environment.GetFolderPath(Environment.SpecialFolder.Startup) & "\CacheBox.exe")
-            End If
+        'If the check box is checked (Saying to open on startup)
+        If CheckBox1.Checked Then
+            'Create a shortcut
+            Dim startupFolderPath = Environment.GetFolderPath(Environment.SpecialFolder.Startup)
+            'Create a Wscript object (a powerful shell command thingy... see VBScript! :D)
+            Dim Shell = CreateObject("Wscript.Shell")
+            ' The full path for the shortcut to be in
+            Dim shortCutLinkFilePath = startupFolderPath & "\CacheBox.lnk"
+            'Create the shortcut, naming it like C:\<StartupFolder>\CacheBox.lnk
+            Dim shortCutProgram = Shell.CreateShortcut(shortCutLinkFilePath)
+            ' Give it a description
+            shortCutProgram.Description = "A file backing up program"
+            ' When the program is started, tell it which directory to call home
+            shortCutProgram.WorkingDirectory = Application.StartupPath
+            ' The actaull thing we're pointing to (The cachebox.exe)
+            shortCutProgram.TargetPath = Application.ExecutablePath
+            ' Save the shortcut
+            shortCutProgram.Save()
         End If
     End Sub
 
     Private Sub backupTextBox_Validated(sender As Object, e As EventArgs) Handles backupTextBox.Validated
+        ' If the directory exists
         If My.Computer.FileSystem.DirectoryExists(backupTextBox.Text) Then
+            ' Set the FinalDestination
             My.Settings.FinalDestination = backupTextBox.Text
         Else
+            ' If they tried to put something in
             If backupTextBox.Text <> "" Then
+                ' Tell them it isn't valid
                 MsgBox("This is an invalid backup path.", vbOK, "Invalid Path")
+                ' Move back to the textbox
                 backupTextBox.Select()
             End If
         End If
     End Sub
 
     Private Sub backupTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles backupTextBox.KeyPress
+        ' If you press enter
         If e.KeyChar = vbCr Then
+            ' Validate the backup location and set
             backupTextBox_Validated(Me, EventArgs.Empty)
         End If
     End Sub
 
     Private Sub backupTextBox_DoubleClick(sender As Object, e As EventArgs) Handles backupTextBox.DoubleClick
         Dim c As New FolderBrowserDialog
+        'Backup an empty folder? Sure, why not?
         c.ShowNewFolderButton = True
         c.Description = "Select a folder to copy files to..."
+        'Show the folder browser (Which I think is ugly and annoying 
+        '   cause I can't copy/paste a folder path, but whatever, I'm just the dev)
         If c.ShowDialog = DialogResult.OK Then
+            'Set the textbox to the selected path if they clicked "OK" at the end
             backupTextBox.Text = c.SelectedPath
         End If
     End Sub
 
     Private Sub saveBttn_Click(sender As Object, e As EventArgs) Handles saveBttn.Click
-        My.Settings.Save()
-        visibilityCloak = False
-        Me.Hide()
+        'Check that backup folder is selected and a folder to backup was selected
+        If My.Settings.FinalDestination <> "" And My.Settings.WatchPaths.Count > 0 Then
+            ' Save any settings that were changed
+            My.Settings.Save()
+            ' Hide the form
+            visibilityCloak = False
+            Me.Hide()
+        Else
+            'Alert the user folders are missing
+            MsgBox("All folder paths need to be input before closing." & vbCrLf & "Close to revert your settings.", MsgBoxStyle.OkOnly, "Missing Folders")
+        End If
     End Sub
 
     Private Sub colorComboBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles colorComboBox.SelectedIndexChanged
@@ -206,7 +239,9 @@ Public Class AppForm
         Dim bttnColor As Color
         Dim bttnTxtColor As Color
         Dim textColor As Color
+        'Based on the choice of the combo box
         Select Case colorComboBox.SelectedItem
+            'Set a color variable to be used below
             Case "Black"
                 formColor = Color.FromArgb(51, 50, 50)
                 textboxColor = Color.FromArgb(228, 214, 167)
@@ -238,6 +273,8 @@ Public Class AppForm
                 textColor = Color.FromArgb(0, 0, 0)
                 bttnTxtColor = Color.Black
         End Select
+
+        'Apply the colors to the form
         Me.BackColor = formColor
         taskbarColor = formColor
 
@@ -259,6 +296,7 @@ Public Class AppForm
         CheckBox1.ForeColor = textColor
         taskbarTextColor = textColor
 
+        'Update the color scheme preference
         My.Settings.ColorScheme = colorComboBox.SelectedText
     End Sub
 
@@ -274,5 +312,9 @@ Public Class AppForm
 
     Private Sub CheckBox1_Click(sender As Object, e As EventArgs) Handles CheckBox1.Click
         My.Settings.LaunchOnStartup = CheckBox1.Checked
+    End Sub
+
+    Private Sub ListBox1_DoubleClick(sender As Object, e As EventArgs) Handles ListBox1.DoubleClick
+        ' TODO: Edit file paths on double click
     End Sub
 End Class
