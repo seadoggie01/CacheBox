@@ -1,5 +1,7 @@
 ﻿Public Class RefreshBackup
 
+
+    'This returns a list of a full paths to files and searches recursively
     Shared Function testing(directory As String) As List(Of String)
         testing = New List(Of String)
         'If the directory exists
@@ -13,8 +15,13 @@
                     testing.AddRange(testing(c))
                 Next
             Catch ex As Exception
+                ' If the exection is an unauthorized access exception
+                '   This is thrown in Win 10 when attempting to access an old
+                '   shortcut style link to 'My Documents' which is kept around
+                '   by Microsoft for old apps. It is not accessible and doesn't
+                '   work. I should really find a better way to ignore it however
                 If ex.GetType().Equals(New UnauthorizedAccessException()) Then
-                    'Do nothing, ignore Unauthorized use
+                    'Do nothing, ignore Unauthorized use exccptions... see above
                 Else
                     Debug.Print("Error in backup: " & ex.Message)
                 End If

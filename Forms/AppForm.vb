@@ -28,7 +28,7 @@ Public Class AppForm
                 'Show the form
                 visibilityCloak = True
                 Me.Show()
-                My.Settings.WatchPaths = New Specialized.StringCollection
+                My.Settings.WatchPaths = New Global.System.Collections.Specialized.StringCollection
             Else
                 'Don't show the form
                 visibilityCloak = False
@@ -66,17 +66,14 @@ Public Class AppForm
             e.Cancel = True
             Return
         Else
-            'for each path to watch
-            For Each c In Watcher.WatchPath
-                'Register the event handlers
-                Watcher.Main(c)
-            Next
             Do
                 'Pause for 2 seconds
                 System.Threading.Thread.Sleep(2000)
-                'If we're connected to the network and weren't previously
+                'If we're connected to the network
                 If Watcher.NetworkConnected(Watcher.FinalDestinationFolder) Then
+                    ' If we weren't connected
                     If Watcher.networkConnection = False Then
+                        ' We're connected now
                         Watcher.networkConnection = True
                         'Call network reconnect (which will make this thread busy and not call another OnNetworkReconnected())
                         Watcher.OnNetworkReconnected()
@@ -100,7 +97,6 @@ Public Class AppForm
     End Sub
 
     Private Sub myicon_DoubleClick(sender As Object, e As EventArgs) Handles myicon.DoubleClick
-        'Take off your invisibility cloak :(
         visibilityCloak = True
         SetVisibleCore(True)
         Me.Show()
@@ -148,7 +144,6 @@ Public Class AppForm
         c.Description = "Select a folder to copy files from..."
         If c.ShowDialog = DialogResult.OK Then
             ListBox1.Items.Add(c.SelectedPath.ToString)
-            Watcher.WatchPath.Add(c.SelectedPath.ToString)
             Watcher.Main(c.SelectedPath.ToString)
             My.Settings.WatchPaths.Add(c.SelectedPath)
         End If
