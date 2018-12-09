@@ -92,28 +92,38 @@
     End Function
 
     Private Shared Sub OnRenamed(source As Object, e As IO.RenamedEventArgs)
-        Debug.Print("Renamed File: " & e.OldFullPath & " to " & e.Name)
         'If the network is connected
         If NetworkConnected(FinalDestinationFolder) Then
             'If the file is already on the network
             If My.Computer.FileSystem.FileExists(FinalDestinationFolder & e.OldName) And Not My.Computer.FileSystem.FileExists(FinalDestinationFolder & e.Name) Then
                 ' Rename file on network
                 My.Computer.FileSystem.RenameFile(FinalDestinationFolder & e.OldName, FinalDestinationFolder & e.Name)
+                Debug.Print("Renamed File: " & e.OldFullPath & " to " & e.Name)
             Else
                 ' Copy file to the network
                 CopyFileToNetwork(e.FullPath, FinalDestinationFolder & e.Name)
             End If
         Else
-
+            'No network, need to deal with it later...
+            'Check for it in files to be copied
+            If My.Settings.FilesToCopy.Contains(FinalDestinationFolder & e.OldName) Then
+                'Delete the entry
+                My.Settings.FilesToCopy.Remove(FinalDestinationFolder & e.OldName)
+            End If
+            ' Copy the new file later... ToDo? Make a filestorename?
+            My.Settings.FilesToCopy.Add(FinalDestinationFolder & e.Name)
+            Debug.Print("Added " & e.Name & " to the list to be copied later.")
         End If
     End Sub
 
     Public Shared Sub RenameFile(oldPathFileName As String, newPathFileName As String)
         'If we're connected to the network
         If NetworkConnected(FinalDestinationFolder) Then
+            ' If the old file exists
             If My.Computer.FileSystem.FileExists(oldPathFileName) Then
                 'Rename the file
                 My.Computer.FileSystem.RenameFile(oldPathFileName, newPathFileName)
+                ' If it's a directory
             ElseIf My.Computer.FileSystem.DirectoryExists(oldPathFileName) Then
                 'Rename the directory
                 My.Computer.FileSystem.RenameDirectory(oldPathFileName, newPathFileName)

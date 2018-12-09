@@ -30,53 +30,60 @@ Partial Class RightClickTaskbar
         Me.ToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.BackupAndDeleteExtraToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'ContextMenuStrip1
         '
-        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CacheBoxToolStripMenuItem, Me.ToolStripSeparator2, Me.OptionsToolStripMenuItem, Me.ToolStripMenuItem1, Me.ToolStripSeparator1, Me.ExitToolStripMenuItem})
+        Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.CacheBoxToolStripMenuItem, Me.ToolStripSeparator2, Me.OptionsToolStripMenuItem, Me.ToolStripMenuItem1, Me.BackupAndDeleteExtraToolStripMenuItem, Me.ToolStripSeparator1, Me.ExitToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
         Me.ContextMenuStrip1.ShowImageMargin = False
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(117, 104)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(176, 126)
         '
         'CacheBoxToolStripMenuItem
         '
         Me.CacheBoxToolStripMenuItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me.CacheBoxToolStripMenuItem.Name = "CacheBoxToolStripMenuItem"
-        Me.CacheBoxToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.CacheBoxToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.CacheBoxToolStripMenuItem.Text = "Cache Box"
         Me.CacheBoxToolStripMenuItem.TextImageRelation = System.Windows.Forms.TextImageRelation.Overlay
         '
         'ToolStripSeparator2
         '
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
-        Me.ToolStripSeparator2.Size = New System.Drawing.Size(113, 6)
+        Me.ToolStripSeparator2.Size = New System.Drawing.Size(172, 6)
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.OptionsToolStripMenuItem.Text = "Options"
         '
         'ToolStripMenuItem1
         '
         Me.ToolStripMenuItem1.Name = "ToolStripMenuItem1"
-        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(116, 22)
+        Me.ToolStripMenuItem1.Size = New System.Drawing.Size(175, 22)
         Me.ToolStripMenuItem1.Text = "Backup Now"
         Me.ToolStripMenuItem1.ToolTipText = "Copy All Files to backup"
         '
         'ToolStripSeparator1
         '
         Me.ToolStripSeparator1.Name = "ToolStripSeparator1"
-        Me.ToolStripSeparator1.Size = New System.Drawing.Size(113, 6)
+        Me.ToolStripSeparator1.Size = New System.Drawing.Size(172, 6)
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         Me.ExitToolStripMenuItem.ToolTipText = "Close Cache Box"
+        '
+        'BackupAndDeleteExtraToolStripMenuItem
+        '
+        Me.BackupAndDeleteExtraToolStripMenuItem.Name = "BackupAndDeleteExtraToolStripMenuItem"
+        Me.BackupAndDeleteExtraToolStripMenuItem.Size = New System.Drawing.Size(175, 22)
+        Me.BackupAndDeleteExtraToolStripMenuItem.Text = "Backup and Delete Extra"
         '
         'RightClickTaskbar
         '
@@ -102,4 +109,5 @@ Partial Class RightClickTaskbar
     Friend WithEvents OptionsToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents CacheBoxToolStripMenuItem As ToolStripMenuItem
     Friend WithEvents ToolStripSeparator2 As ToolStripSeparator
+    Friend WithEvents BackupAndDeleteExtraToolStripMenuItem As ToolStripMenuItem
 End Class
