@@ -61,14 +61,14 @@
             Select Case e.ChangeType
                 Case IO.WatcherChangeTypes.Created
                     'Copy file
-                    CopyFileToNetwork(e.FullPath, FinalDestinationFolder & RemoveWatchPath(e.FullPath))
+                    CopyFileToNetwork(e.FullPath, FinalDestinationFolder & "\" & RemoveWatchPath(e.FullPath))
                 Case IO.WatcherChangeTypes.Changed
                     'Copy file (Overwrites any changes)
-                    CopyFileToNetwork(e.FullPath, FinalDestinationFolder & RemoveWatchPath(e.FullPath))
+                    CopyFileToNetwork(e.FullPath, FinalDestinationFolder & "\" & RemoveWatchPath(e.FullPath))
                 Case IO.WatcherChangeTypes.Deleted
-                    Debug.Print("Deleting file " & FinalDestinationFolder & RemoveWatchPath(e.FullPath))
+                    Debug.Print("Deleting file " & FinalDestinationFolder & "\" & RemoveWatchPath(e.FullPath))
                     'Delete file
-                    DeleteFile(FinalDestinationFolder & RemoveWatchPath(e.FullPath))
+                    DeleteFile(FinalDestinationFolder & "\" & RemoveWatchPath(e.FullPath))
             End Select
         End If
     End Sub

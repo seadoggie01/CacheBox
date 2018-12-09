@@ -115,6 +115,8 @@ Public Class RightClickTaskbar
                         If localCopy.Contains(path & Replace(backupcopy(i), My.Settings.FinalDestination, "")) Then
                             deleteFile = False
                             Exit For
+                        Else
+                            Debug.Print("Extra file: " & backupcopy(i))
                         End If
                     Next
                     If deleteFile Then
@@ -130,7 +132,7 @@ Public Class RightClickTaskbar
     End Sub
 
     Private Function deleteEmptyDirectory(c)
-        Debug.Print(c)
+        Debug.Print("Checking for empty directory: " & c)
         Dim fileCount = My.Computer.FileSystem.GetDirectoryInfo(c).GetFiles.Count
         Dim dirCount = My.Computer.FileSystem.GetDirectoryInfo(c).GetDirectories.Count
         ' If it has no files or directories
@@ -151,6 +153,7 @@ Public Class RightClickTaskbar
                 End If
             Next
             If allEmpty Then
+                Debug.Print("Deleting: " & c)
                 My.Computer.FileSystem.GetDirectoryInfo(c).Delete(True)
                 Return True
             Else
